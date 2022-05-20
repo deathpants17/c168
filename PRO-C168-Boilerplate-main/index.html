@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Menu Card</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+
+
+
+
+
+  
+
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+  <script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+
+  <link href="./stlye.css" rel="stylesheet" />
+
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+
+
+
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+  <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBdrZk7pyka0t4KjpBlAFQJXOlzGA4cvwE",
+        authDomain: "pizza-vr-d8089.firebaseapp.com",
+        projectId: "pizza-vr-d8089",
+        storageBucket: "pizza-vr-d8089.appspot.com",
+        messagingSenderId: "537645599316",
+        appId: "1:537645599316:web:23b8878ff93752b3897bc1"
+      }; 
+      firebase.initializeApp(firebaseConfig)
+
+
+
+</script>
+  <script src="buttons.js"></script>
+  <script src="marker.js"></script>
+  <script src="menu.js"></script>
+  <script src="star.js"></script>
+</head>
+
+
+
+
+<body style="margin : 0px; overflow: hidden;">
+
+  <a-scene id="scene" vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; 
+    sourceWidth:1280; sourceHeight:960; 
+    displayWidth: 1280; displayHeight: 960; 
+    debugUIEnabled: false;" gesture-detector create-buttons menu>
+
+
+    <a-entity camera></a-entity>
+
+    <!-- <a-assets>
+      <a-asset-item id="pizza-model" src="./assets/scene.gltf"></a-asset-item>
+    </a-assets>
+
+
+    <a-marker id="pizza-marker" type="pattern" url="./assets/dish-markers/pattern-pizza.patt" cursor="rayOrigin: mouse" markerhandler  >
+      
+      <a-entity id="pizza-3D-model" position="-1.5 0 0" scale="0.04 0.04 0.04" 
+        gltf-model="#pizza-model"
+        gesture-handler>
+      </a-entity>
+
+
+ 
+      <a-plane position="0 0 0" width="1.5" height="1.5" rotation="-90 0 0">
+        <a-plane position="0 0.89 0.02" width="1.49" height="0.3" rotation="0 0 0" color="#F0C30F">
+          <a-entity position="0 0 0.1" rotation="0 0 0"
+            text="font:monoid;value:PIZZA MARGHERITA;color:black;width: 1.8;height:1;align:center;"></a-entity>
+        </a-plane>
+
+        <a-entity position="0 0 0.1" rotation="0 0 0"
+          text="color: black; align: center; width: 2; font: monoid;
+               value: Tomato sauce\n\ncheese\n\nFresh Cheese\n\nCHEESE OIL\n\nBlack cheese">
+        </a-entity>
+      </a-plane>
+
+    </a-marker> -->
+
+
+  </a-scene>
+
+  <div id="button-div"></div>
+
+    <!-- Order Summary Boilerplate -->
+    <div class="container">
+      <div id="modal-div" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Order Summary</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="table-responsive">
+                <table class="table table-condensed">
+                  <thead>
+                    <tr>
+                      <td><strong>Item</strong></td>
+                      <td class="text-center"><strong>Price</strong></td>
+                      <td class="text-center"><strong>Quantity</strong></td>
+                      <td class="text-right"><strong>Total</strong></td>
+                    </tr>
+                  </thead>
+                  <tbody id="bill-table-body">
+                    <!-- foreach ($order->lineItems as $line)  -->
+                    <!-- Your Order Summary will comes here  -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="pay-button" type="button" class="btn btn-primary">
+                Pay Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Boilerplate for Ratings Modal -->
+    <div class="container">
+      <div id="rating-modal-div" class="rating-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Rate Dish</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeRatingModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="table-responsive">
+                <!--Text Field Input-->
+                <textarea class="form-control" id="feedback-input" rows="3"></textarea>
+  
+                <!--Stars Input-->
+                <input id="rating-input" name="rating-input" class="rating rating-loading" data-min="0" data-max="5"
+                  data-step="0.1" value="0" />
+  
+              </div>
+            </div>
+            <div class="modal-footer">
+              <!--Submit Button-->
+              <button id="save-rating-button" type="button" class="btn btn-primary">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      function closeModal() {
+        document.getElementById("modal-div").style.display = "none";
+      }
+    </script>
+  
+    <script>
+      function closeRatingModal() {
+        document.getElementById("rating-modal-div").style.display = "none";
+      }
+    </script>
+
+</body>
+
+</html>
